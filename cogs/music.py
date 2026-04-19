@@ -6,6 +6,7 @@ from collections import deque
 import os
 import random
 import logging
+import platform
 
 from utils.helpers import ydl_opts, ffmpeg_options, PaginationView
 
@@ -205,7 +206,10 @@ class Music(commands.Cog):
             ctx.voice_client.stop() 
             await ctx.voice_client.disconnect()
         self.now_playing_msgs.pop(ctx.guild.id, None)
-        os.system("taskkill /f /im ffmpeg.exe >nul 2>&1")
+        if platform.system() == "Windows":
+            os.system("taskkill /f /im ffmpeg.exe >nul 2>&1")
+        else:
+            os.system("pkill -9 ffmpeg > /dev/null 2>&1")
         await ctx.send("🛑 Bot detenido.")
 
     @commands.command()
@@ -242,7 +246,10 @@ class Music(commands.Cog):
             if member.guild.id in self.queues:
                 self.queues[member.guild.id].clear()
             self.now_playing_msgs.pop(member.guild.id, None)
-            os.system("taskkill /f /im ffmpeg.exe >nul 2>&1")
+            if platform.system() == "Windows":
+                os.system("taskkill /f /im ffmpeg.exe >nul 2>&1")
+            else:
+                os.system("pkill -9 ffmpeg > /dev/null 2>&1")
             await voice_client.disconnect()
 
 async def setup(bot):
