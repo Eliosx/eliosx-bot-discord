@@ -70,5 +70,10 @@ async def help(ctx):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CheckFailure):
         await ctx.send("🔒 **Acceso denegado:** Bot bloqueado o ID incorrecto.")
+    else:
+        # Esto imprimirá el error en la consola de Ubuntu
+        print(f"ERROR DETECTADO: {error}")
+        # Esto hará que el bot te mande el error por el chat de Discord
+        await ctx.send(f"⚠️ Me rompí: {error}")
 
 bot.run(os.getenv('DISCORD_TOKEN'))
